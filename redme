@@ -1,0 +1,36 @@
+这里讲的是在有公网IP的前提下，在路由器设置了ddns域名转发后。
+
+在外网（比如手机4G）下域名解析可以正常访问到内网的nas等设备，
+
+但是在同局域网下，通过域名却无法访问到内网设备，必须需要手动输入内网设备的ip才可以访问。
+
+具体操作流程，先通过ssh访问到openwrt的后台
+
+然后输入nano /etc/sysctl.d/11-br-netfilter.conf
+
+查看里面的文本是否有以下文件，如果没有则添加，如果不一样则修改为如图所示
+
+net.bridge.bridge-nf-call-arptables=0
+
+net.bridge.bridge-nf-call-ip6tables=0
+
+net.bridge.bridge-nf-call-iptables=0
+
+nano /etc/sysctl.d/11-br-netfilter.conf
+然后Ctrl+X保存，输入Y确认。
+
+再输入nano /etc/sysctl.conf
+
+查看里面的文件，并将之前的代码输入到里面
+
+nano /etc/sysctl.conf
+然后Ctrl+X保存，输入Y确认。
+
+输入sysctl -p命令，查看输出结果是不是上面提到的那三行内容。
+
+
+
+sysctl -p
+最后输入/etc/init.d/sysctl restart
+
+此时可以在局域网输入域名看是否正常访问。 
